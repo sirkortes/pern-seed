@@ -11,15 +11,6 @@ app.use(cors())
 app.use(express.json())
 
 // routes
-/*
-app.post('/todos', async (req, res) => {
-  try {
-    
-  } catch (err) {
-    console.error(err.message)
-  }
-})
-*/
 
 // create a todo with async so it waits for db process
 app.post('/todos', async (req, res) => {
