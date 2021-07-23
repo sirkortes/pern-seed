@@ -12,8 +12,9 @@ const InputTodo = () => {
         body: JSON.stringify(body)
       })
 
-      console.log('response', response)
-      console.log('response.body', response.body)
+      console.log('submit response', response)
+      // to refresh once response is sent
+      window.location = '/'
     } catch (error) {
       console.error(error.message)
     }
