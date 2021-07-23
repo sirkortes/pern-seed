@@ -3,6 +3,19 @@ import React, { useEffect, useState } from 'react'
 const ListTodos = () => {
   const [todos, setTodos] = useState([])
 
+  const deleteTodo = async (id) => {
+    try {
+      const deleteTodo = await fetch(`http://localhost:5000/todos/${id}`, {
+        method: 'DELETE'
+      })
+
+      console.log('deleteTodo', deleteTodo)
+      setTodos(todos.filter((todo) => todo.todo_id !== id))
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+
   const getTodos = async () => {
     try {
       const response = await fetch('http://localhost:5000/todos')
@@ -13,6 +26,7 @@ const ListTodos = () => {
     }
   }
   useEffect(() => getTodos(), [])
+
   return (
     <>
       <h1>List Todos</h1>
@@ -30,8 +44,14 @@ const ListTodos = () => {
             <tr key={todo.todo_id}>
               <th scope='row'>{todo.todo_id}</th>
               <td>{todo.description}</td>
-              <td>Edit</td>
-              <td>Delete</td>
+              <td>
+                <button className='btn btn-warning'>Edit</button>
+              </td>
+              <td>
+                <button className='btn btn-danger' onClick={(e) => deleteTodo(todo.todo_id)}>
+                  Delete
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
