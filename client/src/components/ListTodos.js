@@ -1,32 +1,20 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import EditTodo from './EditTodo'
+import { getTodos, deleteTodo } from './../store/actions/todos'
 
 const ListTodos = () => {
-  const [todos, setTodos] = useState([])
+  const dispatch = useDispatch()
 
-  const deleteTodo = async (id) => {
-    try {
-      const deleteTodo = await fetch(`/todos/${id}`, {
-        method: 'DELETE'
-      })
+  // gets all todos on init with useEffect
+  const todos = useSelector((state) => state.todos)
 
-      console.log('deleteTodo', deleteTodo)
-      setTodos(todos.filter((todo) => todo.todo_id !== id))
-    } catch (error) {
-      console.log('deleteTodo:', error.message)
-    }
-  }
+  // fn to dispatch deleteTodo which filters from store state
+  const onDeleteTodo = (id) => dispatch(deleteTodo(id))
 
-  const getTodos = async () => {
-    try {
-      const response = await fetch('/todos')
-      const jsonData = await response.json()
-      setTodos(jsonData)
-    } catch (error) {
-      console.error('getTodos:', error.message)
-    }
-  }
-  useEffect(() => getTodos(), [])
+  useEffect(() => {
+    dispatch(getTodos())
+  }, [dispatch])
 
   return (
     <>
@@ -49,7 +37,7 @@ const ListTodos = () => {
                 <EditTodo todo={todo} />
               </td>
               <td>
-                <button className='btn btn-danger' onClick={(e) => deleteTodo(todo.todo_id)}>
+                <button className='btn btn-danger' onClick={(e) => onDeleteTodo(todo.todo_id)}>
                   Delete
                 </button>
               </td>
