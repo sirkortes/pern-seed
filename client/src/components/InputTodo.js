@@ -1,23 +1,15 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { createTodo } from './../store/actions/todos'
 
 const InputTodo = () => {
+  const dispatch = useDispatch()
   const [description, setDescription] = useState('')
-  const onSubmitForm = async (e) => {
+  const onSubmitForm = (e) => {
     e.preventDefault()
-    try {
-      const body = { description }
-      const response = await fetch('/todos', {
-        method: 'POST',
-        headers: { 'Content-type': 'application/json' },
-        body: JSON.stringify(body)
-      })
-
-      console.log('submit response', response)
-      // to refresh once response is sent
-      window.location = '/'
-    } catch (error) {
-      console.error(error.message)
-    }
+    const body = { description }
+    dispatch(createTodo(body))
+    setDescription('')
   }
 
   return (

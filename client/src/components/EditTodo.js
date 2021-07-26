@@ -1,24 +1,16 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { updateTodo } from './../store/actions/todos'
 
 const EditTodo = ({ todo }) => {
+  const dispatch = useDispatch()
   const [description, setDescription] = useState(todo.description)
 
   // edit description fn
   const updateDescription = async (e) => {
     e.preventDefault()
-    try {
-      const body = { description }
-      const response = await fetch(`/todos/${todo.todo_id}`, {
-        method: 'PUT',
-        headers: { 'Content-type': 'application/json' },
-        body: JSON.stringify(body)
-      })
-
-      console.log('edit response', response)
-      window.location = '/'
-    } catch (error) {
-      console.log('updateDescription:', error.message)
-    }
+    const body = { description }
+    dispatch(updateTodo(todo.todo_id, body))
   }
 
   return (
